@@ -1,27 +1,37 @@
 package dictionariesandhashmaps;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CountTriplets {
     static long countTriplets(List<Long> arr, long r) {
-        long triplets = 0;
-        for (int i = 0; i < arr.size(); i++) {
-            for (int j = i + 1; j < arr.size(); j++) {
-                if ((arr.get(i) * r) == arr.get(j)) {
-                    triplets += findThird(arr.get(j), r, arr.subList(j + 1, arr.size()));
-                }
+        Map<Long, Long> candidate = new HashMap<>();
+        Map<Long, Long> triplets = new HashMap<>();
+
+        long count = 0L;
+
+        for (int i=0; i < arr.size(); ++i) {
+            long key = arr.get(i);
+            long div = key/r;
+
+            if (triplets.containsKey(div) && (key % r == 0)) {
+                count += triplets.get(div);
             }
+
+            if (candidate.containsKey(div) && (key % r == 0)) {
+                Long value = candidate.get(div);
+                triplets.put(key, triplets.getOrDefault(key, 0L) + value);
+            }
+
+            candidate.put(key, candidate.getOrDefault(key, 0L) + 1L);
+
         }
-        return triplets;
+
+        return count;
     }
 
-    private static long findThird(Long middleValue, long commonRation, List<Long> remainingList) {
-        return remainingList.stream()
-                .filter(elem -> (middleValue * commonRation) == elem)
-                .mapToLong(Long::longValue)
-                .count();
-    }
 
 
     public static void main(String[] args) {
