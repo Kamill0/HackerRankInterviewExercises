@@ -1,8 +1,6 @@
 package arrays;
 
 public class MinimumSwaps2 {
-
-
     static int minimumSwaps(int[] arr) {
         int count = 0;
 
